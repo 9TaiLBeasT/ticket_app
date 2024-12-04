@@ -15,7 +15,7 @@ class AllHotels extends StatelessWidget {
           title: const Text('All Hotels'),
         ),
         body: Container(
-          margin: EdgeInsets.only(left: 8),
+          margin: const EdgeInsets.only(left: 8),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GridView.builder(

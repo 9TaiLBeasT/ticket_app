@@ -82,10 +82,14 @@ class _HotelDetailState extends State<HotelDetail> {
           SliverList(
               delegate: SliverChildListDelegate([
             const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                  "Welcome to The Grand Horizon Hotel, where elegance and comfort come together to create an unforgettable experience. Located in the heart of the city, our hotel offers a sanctuary of luxury, perfect for both business and leisure travelers. Each of our meticulously designed rooms and suites features plush bedding, modern decor, and panoramic views of the skyline or serene natural landscapes. Guests can savor culinary masterpieces at our signature restaurant, enjoy handcrafted cocktails at the rooftop bar, or relax in our tranquil spa and wellness center. For those with a taste for adventure, we are just minutes away from major attractions, shopping districts, and cultural landmarks. Business travelers will appreciate our state-of-the-art conference facilities, high-speed internet, and dedicated concierge services. Whether you're here for a short stay or an extended retreat, The Grand Horizon Hotel ensures a seamless blend of comfort, style, and exceptional service to make every moment extraordinary."),
-            ),
+                padding: EdgeInsets.all(16.0),
+                child: ExpandedTextWidget(
+                  text:
+                      "Welcome to The Grand Horizon Hotel, where elegance and comfort come together to create an unforgettable experience. Located in the heart of the city, our hotel offers a sanctuary of luxury, perfect for both business and leisure travelers. Each of our meticulously designed rooms and suites features plush bedding, modern decor, and panoramic views of the skyline or serene natural landscapes. Guests can savor culinary masterpieces at our signature restaurant, enjoy handcrafted cocktails at the rooftop bar, or relax in our tranquil spa and wellness center. For those with a taste for adventure, we are just minutes away from major attractions, shopping districts, and cultural landmarks. Business travelers will appreciate our state-of-the-art conference facilities, high-speed internet, and dedicated concierge services. Whether you're here for a short stay or an extended retreat, The Grand Horizon Hotel ensures a seamless blend of comfort, style, and exceptional service to make every moment extraordinary.",
+                )
+                //Text(
+                //  "Welcome to The Grand Horizon Hotel, where elegance and comfort come together to create an unforgettable experience. Located in the heart of the city, our hotel offers a sanctuary of luxury, perfect for both business and leisure travelers. Each of our meticulously designed rooms and suites features plush bedding, modern decor, and panoramic views of the skyline or serene natural landscapes. Guests can savor culinary masterpieces at our signature restaurant, enjoy handcrafted cocktails at the rooftop bar, or relax in our tranquil spa and wellness center. For those with a taste for adventure, we are just minutes away from major attractions, shopping districts, and cultural landmarks. Business travelers will appreciate our state-of-the-art conference facilities, high-speed internet, and dedicated concierge services. Whether you're here for a short stay or an extended retreat, The Grand Horizon Hotel ensures a seamless blend of comfort, style, and exceptional service to make every moment extraordinary."),
+                ),
             const Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -93,21 +97,60 @@ class _HotelDetailState extends State<HotelDetail> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            Container(
+            SizedBox(
               height: 200,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
+                  itemCount: hotelList[index]['images'].length,
+                  itemBuilder: (context, imagesIndex) {
                     return Container(
                         margin: const EdgeInsets.all(16),
-                        child: Image.network(
-                            "https://via.placeholder.com/200x200"));
+                        child: Image.asset(
+                            "assets/images/${hotelList[index]['images'][imagesIndex]}"));
                   }),
             )
           ]))
         ],
       ),
+    );
+  }
+}
+
+class ExpandedTextWidget extends StatefulWidget {
+  const ExpandedTextWidget({super.key, required this.text});
+  final String text;
+
+  @override
+  State<ExpandedTextWidget> createState() => _ExpandedTextWidgetState();
+}
+
+class _ExpandedTextWidgetState extends State<ExpandedTextWidget> {
+  bool isExpanded = false;
+  _toogleExpansion() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var textWidget = Text(
+      widget.text,
+      maxLines: isExpanded ? null : 9,
+      overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textWidget,
+        GestureDetector(
+          onTap: _toogleExpansion,
+          child: Text(
+            isExpanded ? 'Less' : 'more',
+            style: AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
+          ),
+        )
+      ],
     );
   }
 }
