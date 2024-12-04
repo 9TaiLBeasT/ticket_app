@@ -11,20 +11,41 @@ import 'package:ticket_app/base/res/media.dart';
 import 'package:ticket_app/base/res/styles/app_styles.dart';
 import 'package:ticket_app/base/utils/all_json.dart';
 
-class TicketScreen extends StatelessWidget {
+class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
+
+  @override
+  State<TicketScreen> createState() => _TicketScreenState();
+}
+
+class _TicketScreenState extends State<TicketScreen> {
+  late int ticketIndex = 0;
+
+  @override
+  void didChangeDependencies() {
+    if(ModalRoute.of(context)!.settings.arguments!=null){
+      var args = ModalRoute.of(context)!.settings.arguments as Map;
+      ticketIndex = args["index"];
+      super.didChangeDependencies();
+    }
+    
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
+      appBar: AppBar(
+        title: Text("Tickets"),
+        backgroundColor: AppStyles.bgColor,
+      ),
       body: Stack(
         children: [
           ListView(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             children: [
-              const SizedBox(
+              /*const SizedBox(
                 height: 40,
               ),
               Text(
@@ -33,7 +54,7 @@ class TicketScreen extends StatelessWidget {
               ),
               const SizedBox(
                 height: 20,
-              ),
+              ),*/
               const AppTicketTabs(
                 firstTab: 'Upcoming',
                 secondTab: 'Previous',
@@ -44,7 +65,7 @@ class TicketScreen extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.only(left: 16),
                   child: TicketView(
-                    ticket: ticketList[0],
+                    ticket: ticketList[ticketIndex],
                     isColor: true,
                   )),
               const SizedBox(
@@ -182,7 +203,7 @@ class TicketScreen extends StatelessWidget {
               ),
               Container(
                   margin: EdgeInsets.only(left: 16),
-                  child: TicketView(ticket: ticketList[0]))
+                  child: TicketView(ticket: ticketList[ticketIndex]))
             ],
           ),
           const TicketBall(
